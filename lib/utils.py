@@ -1,23 +1,22 @@
-import calendar
-import datetime
 import socket
 import subprocess
-import time
+import logging
 
-import configs
-
-
-def reset_last_time_service_observed():
-    configs.last_time_service_observed = calendar.timegm(time.gmtime())
+logger = logging.getLogger('pstf2_logger')
 
 
-def formal_print(string):
-    """
-    Just a nicer format for printing strings
-    :param string:
-    :return:
-    """
-    print(f'[+] {str(datetime.datetime.now())} {string}')
+def start_logger(lvl=logging.INFO):
+    # create logger with 'spam_application'
+    logger = logging.getLogger('pstf2_logger')
+    logger.setLevel(lvl)
+    # create console handler with a higher log level
+    ch = logging.StreamHandler()
+    ch.setLevel(lvl)
+    # create formatter and add it to the handlers
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    # add the handlers to the logger
+    logger.addHandler(ch)
 
 
 def run(cmd):
@@ -26,7 +25,7 @@ def run(cmd):
     :param cmd: cmd to run as a different process
     :return: ref to the popened subprocess
     """
-    formal_print(f'Running command:\n\t{cmd}')
+    logger.info(f'Running command:\n\t{cmd}')
     return subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
 

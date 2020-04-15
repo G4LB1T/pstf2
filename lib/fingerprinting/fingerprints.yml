@@ -1,0 +1,23 @@
+# Semi-passive fingerprinting, DNS requests might reach to target
+allow_reverse_dns: True
+
+# add ASNs for known vendors here
+# e.g. for Google you may add 15169
+blacklisted_asns:
+    - '15169'
+    - '16509'
+
+browser_versions_thresholds:
+    'Chrome': 41
+    'Firefox': 50
+    'Firefox Mobile': 54
+    'IE': 9
+    'Safari': 10
+    'Mobile Safari': 10
+    'Edge': 14
+
+# timeout after a service is detected, in seconds
+blacklist_service_observed_timeout: 300
+
+# LRU cache for ip to asn association results
+asn_cache_size: 128

@@ -1,0 +1,21 @@
+p0f_config:
+  # change your username at the very least, remember to change in both paths
+  p0f_bin_path: '/Users/gbitensk/work/web_fp/p0f-3.09b/p0f'
+  p0f_fp_path: '/Users/gbitensk/work/web_fp/p0f-3.09b/p0f.fp'
+  iface: 'lo0'
+  p0f_named_socket: '/tmp/p0f_socket'
+
+web_server:
+  http_server_port: 80
+  # split so won't trigger local AV/"EDR"
+  eicar_text_a: 'X5O!P%@AP[4\PZX54(P^)7CC)7}$'
+  eicar_text_b: 'EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*'
+
+  # In case a security vendor is detected, provide them with premium benign content
+  benign_text:
+    Never gonna give you up\r\n
+    Never gonna let you down\r\n
+    Never gonna run around and desert you\r\n
+    Never gonna make you cry\r\n
+    Never gonna say goodbye\r\n
+    Never gonna tell a lie and hurt you\r\n

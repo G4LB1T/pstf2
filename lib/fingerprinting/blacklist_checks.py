@@ -1,11 +1,27 @@
-import configs
-from p0f_wrapper import get_p0f_data
-from utils import *
-from configs import *
+from lib.servers.p0f_wrapper import get_p0f_data
+from lib.utils import *
 from time import sleep
-from asn_checker import get_asn
+from lib.fingerprinting.asn_checker import get_asn
 import time
 import calendar
+import yaml
+import logging
+
+with open("lib/fingerprinting/fingerprints.yml", "r") as ymlfile:
+    fingerprints_config = yaml.load(ymlfile, Loader=yaml.FullLoader)
+
+logger = logging.getLogger('pstf2_logger')
+
+last_time_service_observed = 0
+
+
+def reset_last_time_service_observed():
+    """
+    Resets the timer for last time we've observed a service to evade from
+    :return:
+    """
+    global last_time_service_observed
+    last_time_service_observed = calendar.timegm(time.gmtime())
 
 
 def do_checks(request):
@@ -16,22 +32,22 @@ def do_checks(request):
     """
     client_ip = request['client_ip_address']
 
-    formal_print('Getting asn data...')
+    logger.info('Getting asn data...')
     try:
         request['asn'] = get_asn(client_ip)
-        formal_print('asn data received!')
+        logger.info('asn data received!')
 
     except:
         request['asn'] = 'No ASN data is available'
-        formal_print('Failed getting asn data')
+        logger.info('Failed getting asn data')
 
     # configurable, due to the fact that it does perform somewhat active fingerprinting
-    if allow_reverse_dns:
-        formal_print('Getting reverse DNS data...')
+    if fingerprints_config['allow_reverse_dns']:
+        logger.info('Getting reverse DNS data...')
         request['ptr_record'] = get_ptr_record(client_ip)
-        formal_print('Reverse DNS data received!')
+        logger.info('Reverse DNS data received!')
 
-    formal_print('Getting p0f data...')
+    logger.info('Getting p0f data...')
     p0f_data = {}
 
     # polling and waiting to get p0f data
@@ -39,7 +55,7 @@ def do_checks(request):
         p0f_data = get_p0f_data(client_ip)
         sleep(0.01)
 
-    formal_print('p0f data received!')
+    logger.info('p0f data received!')
 
     for key in p0f_data:
         if p0f_data[key]:
@@ -51,10 +67,9 @@ def do_checks(request):
     request['p0f_data'] = p0f_data
 
     if any([
+        # TODO remove this if submitted to a 3rd party
         # add vendor specific tests here, e.g.
-        
         # check_vendor_a(reqeust)
-        # check_vendor_b(reqeust)
 
         # generic tests
         check_last_sec_service_observed_timeout(),
@@ -89,6 +104,7 @@ See commented out functions for examples
 #     else:
 #         return False
 
+
 '''
 Generic fingerprint detection
 '''
@@ -116,7 +132,7 @@ def check_obsolete_browser_version(request):
     try:
         browser_type = request['parsed_ua']['user_agent']['family']
         request_version = int(request['parsed_ua']['user_agent']['major'])
-        min_allowed_version = min_browser_versions_allowed[browser_type]
+        min_allowed_version = fingerprints_config['browser_versions_thresholds'][browser_type]
 
         return request_version < min_allowed_version
     except:
@@ -130,4 +146,4 @@ def check_last_sec_service_observed_timeout():
     :return: True iff we've recently seen a service checking our server
     """
     current_time = calendar.timegm(time.gmtime())
-    return current_time < last_time_service_observed + blacklist_service_observed_timeout
+    return current_time < last_time_service_observed + int(fingerprints_config['blacklist_service_observed_timeout'])
