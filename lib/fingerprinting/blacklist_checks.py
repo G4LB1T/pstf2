@@ -72,6 +72,7 @@ def do_checks(request):
         check_last_sec_service_observed_timeout(),
         check_obsolete_browser_version(request),
         check_os_mismatches(request),
+        check_blacklist_asn(request),
         # vendor specific tests
         check_virus_total_ua(request)
         # check_vendor_a(request)
@@ -115,6 +116,15 @@ def check_virus_total_ua(request):
 '''
 Generic fingerprint detection
 '''
+
+
+def check_blacklist_asn(request):
+    if request['asn'] in fingerprints_config['blacklisted_asns']:
+        asn = request['asn']
+        logger.info(f'ASN {asn} is in blacklist!')
+        return True
+    else:
+        return False
 
 
 def check_link_is_ethernet(request):
