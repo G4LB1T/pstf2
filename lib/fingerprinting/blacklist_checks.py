@@ -67,9 +67,6 @@ def do_checks(request):
     request['p0f_data'] = p0f_data
 
     if any([
-        # add vendor specific tests here, e.g.
-        # check_vendor_a(reqeust)
-
         # generic tests
         check_link_is_ethernet(request),
         check_last_sec_service_observed_timeout(),
@@ -77,6 +74,8 @@ def do_checks(request):
         check_os_mismatches(request),
         # vendor specific tests
         check_virus_total_ua(request)
+        # check_vendor_a(request)
+        # check_vendor_b(request)
     ]):
         # reset timer and return True
         reset_last_time_service_observed()
@@ -96,8 +95,7 @@ def check_virus_total_ua(request):
     :param request:
     :return: true iff VirusTotal request is received
     """
-    if 'virustotalcloud' in request['user_agent'].lower() and \
-            check_os_mismatches(request):
+    if 'user_agent' in request and 'virustotalcloud' in request['user_agent'].lower():
         logger.info('Got Request from VirusTotal!')
         return True
     else:
@@ -125,7 +123,12 @@ def check_link_is_ethernet(request):
     :param request: the HTTP GET headers
     :return: True iff MTU value is suspicious
     """
-    return request['p0f_data']['link_type'] != 'Ethernet or modem'
+    if 'link_type' in request['p0f_data'] and request['p0f_data']['link_type'] not in ['Ethernet or modem', 'dsl']:
+        mtu_val = request['p0f_data']['link_type']
+        logger.info(f'Unusual MTU detected, value was typical to {mtu_val} connection!')
+        return True
+    else:
+        return False
 
 
 def check_os_mismatches(request):
@@ -138,7 +141,11 @@ def check_os_mismatches(request):
     p0f_os = get_os_string(request['p0f_data']['os_name'])
     ua_os = get_os_string(request['parsed_ua']['os']['family'])
 
-    return p0f_os != ua_os
+    if p0f_os != ua_os:
+        logger.info(f'p0f OS string was typical to {p0f_os} while ua header was typical to {ua_os}!')
+        return True
+    else:
+        return False
 
 
 def check_obsolete_browser_version(request):
@@ -152,7 +159,12 @@ def check_obsolete_browser_version(request):
         request_version = int(request['parsed_ua']['user_agent']['major'])
         min_allowed_version = fingerprints_config['browser_versions_thresholds'][browser_type]
 
-        return request_version < min_allowed_version
+        if request_version < min_allowed_version:
+            logger.info(f'Browser version was too low! Type: {browser_type}, request version: {request_version}, '
+                        f'minimal version allowed: {min_allowed_version}')
+            return True
+        else:
+            return False
     except:
         # catch errors on UA parsing or illegal major versions
         return False
@@ -164,4 +176,8 @@ def check_last_sec_service_observed_timeout():
     :return: True iff we've recently seen a service checking our server
     """
     current_time = calendar.timegm(time.gmtime())
-    return current_time < last_time_service_observed + int(fingerprints_config['blacklist_service_observed_timeout'])
+    if current_time < last_time_service_observed + int(fingerprints_config['blacklist_service_observed_timeout']):
+        logger.info('Request is from a service currently under cooldown period.')
+        return True
+    else:
+        return False
