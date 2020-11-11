@@ -22,10 +22,11 @@ In some cases the request is sent from an ASN associated explicitly with a speci
 ##### DNS PTR Records
 In rare cases the client's IP address has a PTR record, associating it with URL related to a security vendor.
 
-#### Why is pstf^2 Public?
+## Why is pstf^2 Public?
 I opted for publicly releasing this tool as an open source project since:
 * Malicious links are being used by bad guys on daily basis
-* Security tools are not good enough, some of the methods illustrated by pstf^2 are abused in-the-wild
+* Security tools are not good enough, some of the methods illustrated by pstf^2 are abused in-the-wild.
+
 As part of the tool's construction it was tested against 15 different products, all failed. While I did responsibly disclose details about the attack we still have a long way to go and my expectations is that by making the tool public we will raise the awareness to those tactics which are already being abused by "bad guys". 
 
 ## Running pstf^2
