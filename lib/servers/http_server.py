@@ -46,13 +46,20 @@ class GetHandler(BaseHTTPRequestHandler):
 
         # if detected security service act nicely else serve EICAR as PoC
         if is_blacklisted:
-            logger.info('serving benign content')
-            message = servers_config['web_server']['benign_text']
-            self.send_response(200)
-            self.send_header('Content-Type',
-                             'text/plain; charset=utf-8')
-            self.end_headers()
-            self.wfile.write(message.encode('utf-8'))
+            if servers_config['web_server']['rickroll_mode']:
+                rickroll_url = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+                self.send_response(302)
+                self.send_header('Location', rickroll_url)
+                self.end_headers()
+                pass
+            else:
+                logger.info('serving benign content')
+                message = servers_config['web_server']['benign_text']
+                self.send_response(200)
+                self.send_header('Content-Type',
+                                 'text/plain; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(message.encode('utf-8'))
         else:
             logger.info('serving malicious content')
             message = servers_config['web_server']['eicar_text_a'] + servers_config['web_server']['eicar_text_b']
@@ -67,6 +74,9 @@ class GetHandler(BaseHTTPRequestHandler):
 def start_http_server(server_class=HTTPServer, handler_class=GetHandler):
     """
     Initialize the server, will be started in a differnt thread than p0f so it will co-exist
+    :param do_rickroll:
+    :param malicious_response:
+    :param benign_response:
     :param server_class: standard python HTTP server
     :param handler_class: our custom GET handler
     :return:

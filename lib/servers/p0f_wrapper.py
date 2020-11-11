@@ -9,15 +9,15 @@ with open("lib/servers/servers_config.yml", "r") as ymlfile:
     servers_config = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
 
-def start_p0f():
+def start_p0f(p0f_bin_path, p0f_fp_path, p0f_iface):
     """
     Starts p0f's binary
     :return: ref to the process for closing it later on
     """
-    return run(f'{servers_config["p0f_config"]["p0f_bin_path"]} '
-               f'-i {servers_config["p0f_config"]["iface"]} '
+    return run(f'{p0f_bin_path} '
+               f'-i {p0f_iface} '
                f'-s {servers_config["p0f_config"]["p0f_named_socket"]} '
-               f'-f { servers_config["p0f_config"]["p0f_fp_path"]}')
+               f'-f {p0f_fp_path}')
 
 
 def get_p0f_data(ip):

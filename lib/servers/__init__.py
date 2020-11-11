@@ -6,8 +6,7 @@ from lib.servers import p0f_wrapper, http_server
 
 logger = logging.getLogger('pstf2_logger')
 
-
-def start_servers():
+def start_servers(p0f_bin_path, p0f_fp_path, p0f_iface):
     """
     Here we start both p0f and an HTTP server in parallel
     :return:
@@ -15,7 +14,7 @@ def start_servers():
 
     # start p0f in a different process
     logger.info('Starting p0f...')
-    p0f_proc = p0f_wrapper.start_p0f()
+    p0f_proc = p0f_wrapper.start_p0f(p0f_bin_path, p0f_fp_path, p0f_iface)
     logger.info('p0f started!')
 
     # start HTTP server in a different thread to allow management of the script

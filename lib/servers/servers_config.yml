@@ -1,8 +1,8 @@
 p0f_config:
   # change your username at the very least, remember to change in both paths
-  p0f_bin_path: '/Users/gbitensk/work/web_fp/p0f-3.09b/p0f'
-  p0f_fp_path: '/Users/gbitensk/work/web_fp/p0f-3.09b/p0f.fp'
-  iface: 'lo0'
+  p0f_bin_path: '/usr/sbin/p0f'
+  p0f_fp_path: '/etc/p0f/p0f.fp'
+  iface: 'eth0'
   p0f_named_socket: '/tmp/p0f_socket'
 
 web_server:
@@ -13,5 +13,8 @@ web_server:
 
   # In case a security vendor is detected, provide them with premium benign content
   benign_text:
-    'Never gonna give you up\r\nNever gonna let you down\r\n'
+    'Never gonna give you up
+    Never gonna let you down'
+
+  rickroll_mode: YES
  
