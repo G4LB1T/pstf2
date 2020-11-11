@@ -74,9 +74,7 @@ class GetHandler(BaseHTTPRequestHandler):
 def start_http_server(server_class=HTTPServer, handler_class=GetHandler):
     """
     Initialize the server, will be started in a differnt thread than p0f so it will co-exist
-    :param do_rickroll:
-    :param malicious_response:
-    :param benign_response:
+
     :param server_class: standard python HTTP server
     :param handler_class: our custom GET handler
     :return:

@@ -12,8 +12,12 @@ with open("lib/servers/servers_config.yml", "r") as ymlfile:
 def start_p0f(p0f_bin_path, p0f_fp_path, p0f_iface):
     """
     Starts p0f's binary
+    :param p0f_bin_path: binary file path on disk
+    :param p0f_fp_path: fingerprint file path on disk
+    :param p0f_iface: which traffic should be sniffed
     :return: ref to the process for closing it later on
     """
+
     return run(f'{p0f_bin_path} '
                f'-i {p0f_iface} '
                f'-s {servers_config["p0f_config"]["p0f_named_socket"]} '

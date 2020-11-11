@@ -119,6 +119,11 @@ Generic fingerprint detection
 
 
 def check_blacklist_asn(request):
+    """
+    Is the ASN suspicious?
+    :param request:
+    :return: True iff ASN hints it is a security tool
+    """
     if request['asn'] in fingerprints_config['blacklisted_asns']:
         asn = request['asn']
         logger.info(f'ASN {asn} is in blacklist!')
