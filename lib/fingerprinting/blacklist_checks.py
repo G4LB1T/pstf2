@@ -67,14 +67,16 @@ def do_checks(request):
     request['p0f_data'] = p0f_data
 
     if any([
-        # TODO remove this if submitted to a 3rd party
         # add vendor specific tests here, e.g.
         # check_vendor_a(reqeust)
 
         # generic tests
+        check_link_is_ethernet(request),
         check_last_sec_service_observed_timeout(),
         check_obsolete_browser_version(request),
-        check_os_mismatches(request)
+        check_os_mismatches(request),
+        # vendor specific tests
+        check_virus_total_ua(request)
     ]):
         # reset timer and return True
         reset_last_time_service_observed()
@@ -85,29 +87,45 @@ def do_checks(request):
 
 '''
 Specific fingerprint detection
-
-See commented out functions for examples
 '''
 
 
+def check_virus_total_ua(request):
+    """
+
+    :param request:
+    :return: true iff VirusTotal request is received
+    """
+    if 'virustotalcloud' in request['user_agent'].lower() and \
+            check_os_mismatches(request):
+        logger.info('Got Request from VirusTotal!')
+        return True
+    else:
+        return False
+
+# can be extended, left as "an exercise for the reader"...
 # def check_vendor_a(request):
-#     if 'vendor_a_name' in request['ptr_record'].lower() and check_os_mismatches(request):
-#         return True
-#     else:
-#         return False
-
-
+#     return 'vendor_a_name' in request['ptr_record'].lower() and check_os_mismatches(request)
+#
+#
 # def check_vendor_b(request):
-#     if 'vendor_b_name' in request['user_agent'].lower() and \
-#             check_os_mismatches(request):
-#         return True
-#     else:
-#         return False
+#     return 'vendor_b_name' in request['user_agent'].lower() and check_os_mismatches(request)
+
+
 
 
 '''
 Generic fingerprint detection
 '''
+
+
+def check_link_is_ethernet(request):
+    """
+    Checks if the MTU value is atypical
+    :param request: the HTTP GET headers
+    :return: True iff MTU value is suspicious
+    """
+    return request['p0f_data']['link_type'] != 'Ethernet or modem'
 
 
 def check_os_mismatches(request):

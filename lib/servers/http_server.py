@@ -47,7 +47,7 @@ class GetHandler(BaseHTTPRequestHandler):
         # if detected security service act nicely else serve EICAR as PoC
         if is_blacklisted:
             logger.info('serving benign content')
-            message = 'Nothing to see here'
+            message = servers_config['web_server']['benign_text']
             self.send_response(200)
             self.send_header('Content-Type',
                              'text/plain; charset=utf-8')
