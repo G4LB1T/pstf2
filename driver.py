@@ -19,4 +19,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     start_logger()
-    start_servers(args.p0f_bin_path, args.p0f_fp_path, p0f_iface)
+    start_servers(args.p0f_bin_path, args.p0f_fp_path, args.p0f_iface)
