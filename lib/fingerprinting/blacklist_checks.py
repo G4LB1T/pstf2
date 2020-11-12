@@ -138,7 +138,7 @@ def check_link_is_ethernet(request):
     :param request: the HTTP GET headers
     :return: True iff MTU value is suspicious
     """
-    if 'link_type' in request['p0f_data'] and request['p0f_data']['link_type'] not in ['Ethernet or modem', 'dsl']:
+    if 'link_type' in request['p0f_data'] and request['p0f_data']['link_type'] not in ['ethernet or modem', 'dsl']:
         mtu_val = request['p0f_data']['link_type']
         logger.info(f'Unusual MTU detected, value was typical to {mtu_val} connection!')
         return True

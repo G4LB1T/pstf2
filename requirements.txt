@@ -1,5 +1,5 @@
 httpserver==1.1.0
 requests==2.23.0
-ua-parser==0.10.0
 p0f~=1.0.0
+cymruwhois~=1.6
 PyYAML~=5.3.1
