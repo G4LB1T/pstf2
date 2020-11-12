@@ -36,7 +36,11 @@ def get_ptr_record(ip):
     e.g.: for '203.208.60.1' it will return 'crawl-203-208-60-1.googlebot.com'
     where full record is # ('crawl-203-208-60-1.googlebot.com', ['1.60.208.203.in-addr.arpa'], ['203.208.60.1'])
     """
-    return socket.gethostbyaddr(ip)[0]
+    try:
+        return socket.gethostbyaddr(ip)[0]
+    except:
+        # return an empty string representing the fact there's no PTR record
+        return ''
 
 
 def get_os_string(s):
