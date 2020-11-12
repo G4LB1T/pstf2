@@ -1,5 +1,4 @@
 p0f_config:
-  # change your username at the very least, remember to change in both paths
   p0f_bin_path: '/usr/sbin/p0f'
   p0f_fp_path: '/etc/p0f/p0f.fp'
   iface: 'eth0'
