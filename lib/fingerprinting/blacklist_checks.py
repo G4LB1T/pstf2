@@ -67,16 +67,17 @@ def do_checks(request):
     request['p0f_data'] = p0f_data
 
     if any([
+        # vendor specific tests
+        check_virus_total_ua(request),
+        # check_vendor_a(request)
+        # check_vendor_b(request)
+
         # generic tests
         check_link_is_ethernet(request),
         check_last_sec_service_observed_timeout(),
         check_obsolete_browser_version(request),
         check_os_mismatches(request),
-        check_blacklist_asn(request),
-        # vendor specific tests
-        check_virus_total_ua(request)
-        # check_vendor_a(request)
-        # check_vendor_b(request)
+        check_blacklist_asn(request)
     ]):
         # reset timer and return True
         reset_last_time_service_observed()
