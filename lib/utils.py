@@ -63,3 +63,16 @@ def get_os_string(s):
         return 'ios'
     else:
         return 'unknown'
+
+
+def print_banner():
+    """
+    Prints an ASCII art pstf^2 banner
+    :return: None
+    """
+    pstf_ascii_banner = '                __  ____//|___ \n    ____  _____/ /_/ __//||__ \\\n   / __ \\/ ___/ __/ /_    __/ /\n  / /_/ (__  ) /_/ __/   / __/ \n / .___/____/\\__/_/     /____/ \n/_/                            \n'
+    print('=================================')
+    print('=================================')
+    print(pstf_ascii_banner)
+    print('=================================')
+    print('=================================\n')
