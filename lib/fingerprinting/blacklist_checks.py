@@ -192,8 +192,10 @@ def check_last_sec_service_observed_timeout():
     :return: True iff we've recently seen a service checking our server
     """
     current_time = calendar.timegm(time.gmtime())
-    if current_time < last_time_service_observed + int(fingerprints_config['blacklist_service_observed_timeout']):
-        logger.info('Request is from a service currently under cooldown period.')
+    timeout = fingerprints_config['blacklist_service_observed_timeout']
+    if current_time < last_time_service_observed + int(timeout):
+        logger.info(f'Server is currently under cooldown period, saw a scanner less than {timeout} seconds ago.')
+        logger.info(f'Normal operations will resume in {str(current_time - last_time_service_observed)} seconds.')
         return True
     else:
         return False
