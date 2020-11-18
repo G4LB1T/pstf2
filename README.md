@@ -15,14 +15,16 @@ The server's operator can customize responses, e.g. - if a scanner is detected r
 Below are the main tactics implemented as part of pstf^2:
 ####Application Layer
 ##### Obsolete User Agents
-```
-// TODO: explain on the thresholds 
-```
+Security tools try to hide as legitimate clients, impersonating real browsers, nevertheless - usually this is not the case.
+It is common to see tools which are not maintained properly using fake user-agent headers for browser versions which are a decade old.
+pstf^2 allows you to set a minimal threshold for what you consider as a real non-obsolete version.
 ##### General HTTP Anomalies
-```
-// TODO: provide a couple of examples
-```
-####Link, Network and Transportation Layer
+There are many types of odd implementations the tool is capable of detecting.
+A couple of examples which were presented in the BlackHat talk were:
+- Leaving a `via:` header which disclosed the nature of the virtual host used for sandboxing.
+- `referer:` header which suggested that the link was reached from Google, e.g. `referer: google.com/search?q=specific.site.com`. 
+in the scenarios we tested it made no sense since this product scans emails and when someone clicks an email (not from a web interface) this header is absent.
+#### Link, Network and Transportation Layer
 ##### Correlation
 Multiple TCP parameters can imply either a specific OS version or a specific flavour. Some clients spoof the user-agent header but are running on top of an OS different than the one they declare. 
 ##### MTU Values
@@ -94,13 +96,12 @@ You should see something similar too:
 ```
 Note that setting a DNS record pointing a URL to point at your server is beyond the scope of pstf^2 and at your own responsibility.
 ### Payload Management
-```
-// TODO: describe the default and what is possible to do. 
-```
+pstf^2 has default payloads which are defined within `server_config.yml` and can be customized with ease.
 #### Benign Response
-`// TODO`
+There are two modes, switched by altering the `rickroll_mode` variable for either `YES` or `NO`.
+If it is enabled the security tool will be redirected to a YouTube page with the famous [Rickrolling movie](https://en.wikipedia.org/wiki/Rickrolling), otherwise it will serve a string defined in the same YAML file. 
 #### Malicious Response
-`// TODO`
+By default - "malicious" response was set to the [EICAR standard testing string](https://www.eicar.org/?page_id=3950).
 ## Why is pstf^2 Public?
 I opted for publicly releasing this tool as an open source project since:
 * Malicious links are being used by bad guys on daily basis, in large scale.
@@ -108,6 +109,5 @@ I opted for publicly releasing this tool as an open source project since:
 
 As part of the tool's construction it was tested against 15 different products, all failed. While I did responsibly disclose details about the attack we still have a long way to go and my expectations is that by making the tool public we will raise the awareness to those tactics which are already being abused by "bad guys".
 
-## Special Thanks
-[@Den1al](https://github.com/Den1al) for providing advice when building this tool, giving advices for writingt Python properly and packing it as a Docker image.
-
+##### Special Thanks
+[@Den1al](https://github.com/Den1al) for providing advice when building this tool specifically, and writing Python properly in general as well as assisting in creating it as a Docker image.
