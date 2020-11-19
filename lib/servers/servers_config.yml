@@ -1,6 +1,6 @@
 p0f_config:
-  p0f_bin_path: '/usr/sbin/p0f'
-  p0f_fp_path: '/etc/p0f/p0f.fp'
+  p0f_bin_path: 'p0f-3.09b/p0f'
+  p0f_fp_path: 'p0f-3.09b/p0f.fp'
   iface: 'eth0'
   p0f_named_socket: '/tmp/p0f_socket'
 
