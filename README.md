@@ -13,7 +13,7 @@ pstf^2 is a simple python-based HTTP servers which applies well-known bot detect
 The server's operator can customize responses, e.g. - if a scanner is detected redirect to Google otherwise send malicious content.
 
 Below are the main tactics implemented as part of pstf^2:
-####Application Layer
+#### Application Layer
 ##### Obsolete User Agents
 Security tools try to hide as legitimate clients, impersonating real browsers, nevertheless - usually this is not the case.
 It is common to see tools which are not maintained properly using fake user-agent headers for browser versions which are a decade old.
