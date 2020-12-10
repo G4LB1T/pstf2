@@ -4,8 +4,10 @@ Have you ever wanted a simple, easy and stealth bypass for multiple classes of s
 When attackers try to deliver a payload over the internet they need to overcome multiple tools capable of scanning incoming links. Email filters, scanning engines and even submission to sandbox over URL - all can be bypassed once pstf2 detects them in a passive fashion. Once detected, the tool allows to differentiate between security services and potential victims and deliver either a malicious or benign response.
 
 This tool was released during BlackHat EU 2020:
-
 https://www.blackhat.com/eu-20/arsenal/schedule/#pstf2-link-scanners-evasion-made-easy-21763
+
+Details about the research are available in this blog post:
+https://blogs.akamai.com/sitr/2020/12/evading-link-scanning-security-services-with-passive-fingerprinting.html
 
 ### How it Works?
 The real question is - how link scanners work? Inspecting a malicious link is an action involving web client sending an HTTP GET request. Each vendor uses a different in-house implementation - most trying to mimic a real user interaction to some extent.
@@ -35,8 +37,9 @@ In some cases the request is sent from an ASN associated explicitly with a speci
 In rare cases the client's IP address has a PTR record, associating it with URL related to a security vendor.
 ## Setting up pstf^2
 ### Using Docker
+Assuming you have Docker already installed, it is as simple as that:
 ```
-// TODO: add basic HOWTO when creating the docker image 
+docker-compose up 
 ```
 ### Manual Deployment
 In case you wish to avoid Docker, follow these steps.
