@@ -157,11 +157,12 @@ def check_os_mismatches(request):
     p0f_os = get_os_string(request['p0f_data']['os_name'])
     ua_os = get_os_string(request['parsed_ua']['os']['family'])
 
-    if p0f_os != ua_os:
+    # some tolerance is allowed to allow inaccurate mobile useragent to match p0f's signature
+    if p0f_os == ua_os or (p0f_os  == 'android' and ua_os == 'linux') or (p0f_os  == 'ios' and ua_os == 'mac'):
+        return False
+    else:
         logger.info(f'p0f OS string was typical to {p0f_os} while ua header was typical to {ua_os}!')
         return True
-    else:
-        return False
 
 
 def check_obsolete_browser_version(request):
